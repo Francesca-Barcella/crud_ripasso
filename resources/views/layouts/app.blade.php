@@ -16,9 +16,23 @@
 </head>
 
 <body>
-   
+    <header>
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+            <div class="container">
+                <div class="collapse navbar-collapse" id="collapsibleNavId">
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('items.index')}}"><h3>All Items</h3></a>
+                        </li>
+
+                    </ul>
+                </div>
+        </nav>
+    </header>
+
     <main>
-    @yield('content')
+        @yield('content')
     </main>
 
 </body>

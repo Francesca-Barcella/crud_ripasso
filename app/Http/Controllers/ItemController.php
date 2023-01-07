@@ -15,8 +15,8 @@ class ItemController extends Controller
      */
     public function index()
     {
-      $items = Item::all();
-      return view('items.index', compact('items'));
+        $items = Item::orderByDesc('id')->get();
+        return view('items.index', compact('items'));
     }
 
     /**
@@ -26,7 +26,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        return view('items.create');
     }
 
     /**
@@ -37,7 +37,14 @@ class ItemController extends Controller
      */
     public function store(StoreItemRequest $request)
     {
-        //
+        $data = [
+            'name' => $request['name'],
+            'image' => $request['image'],
+            'price' => $request['price'],
+            'description' => $request['description']
+        ];
+        Item::create($data);
+        return to_route('items.index');
     }
 
     /**
@@ -59,7 +66,7 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
-        //
+        return view('items.edit', compact('item'));
     }
 
     /**
@@ -71,7 +78,14 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request, Item $item)
     {
-        //
+        $data = [
+            'name' => $request['name'],
+            'image' => $request['image'],
+            'price' => $request['price'],
+            'description' => $request['description']
+        ];
+        $item->update($data);
+        return to_route('items.index');
     }
 
     /**
@@ -82,6 +96,7 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        $item->delete();
+        return to_route('items.index');
     }
 }
