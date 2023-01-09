@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use Illuminate\Support\Facades\Validator;
 
 class ItemController extends Controller
 {
@@ -37,19 +38,10 @@ class ItemController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    
+
     public function store(Request $request)
     {
-        /* dd per vedere se classe Request importata correttamente*/
-        //dd($request->all());
-        /* 1° step - validation backend - inserisco le regole di validazione nello store del PageController */
-        $val_data = $request -> validate([
-            'name' => 'required|min:10|max:50',
-            'image' => 'nullable|max:255',
-            /* capire come funzionano i numeri per il price */
-            'description' => 'nullable|max:1000',
-        ]);
-  
+        /* ORIGINE */
         /* $data = [
             'name' => $request['name'],
             'image' => $request['image'],
@@ -58,9 +50,20 @@ class ItemController extends Controller
         ];
         Item::create($data); */
 
-        /* 2° step - validation backend - posso generare l'istanza sfruttando la variabile $val_dat ed il metodo create - salvando il tutto dentro la variabile $item*/
-        $item = Item::create($val_data);
+        /* dd per vedere se classe Request importata correttamente*/
+        //dd($request->all());
+        /* 1° METODO - 1° step - validation backend - inserisco le regole di validazione nello store del PageController */
+        /* $val_data = $request -> validate([
+            'name' => 'required|min:10|max:50',
+            'image' => 'nullable|max:255',
+            //capire come gestire i numeri per il price
+            'description' => 'nullable|max:1000',
+        ]); */
+        /* 2° METODO - 1° step - validation backend - richiamo le regole tramite validation e i campi qui sopra li trasporto nella function validation */
+        $val_data = $this->validation($request->all());
 
+        /* 1° METODO - 2° step - validation backend - posso generare l'istanza sfruttando la variabile $val_dat ed il metodo create - salvando il tutto dentro la variabile $item*/
+        $item = Item::create($val_data);
         return to_route('items.index');
     }
 
@@ -96,20 +99,21 @@ class ItemController extends Controller
     public function update(Request $request, Item $item)
     {
 
-        $val_data = $request -> validate([
+        /*   $val_data = $request -> validate([
             'name' => 'required|min:10|max:50',
             'image' => 'nullable|max:255',
-            /* capire come funzionano i numeri per il price */
-            'description' => 'nullable|max:1000',
-        ]);
-        
+            'description' => 'required|max:1000',
+        ]); */
+
         /* $data = [
             'name' => $request['name'],
             'image' => $request['image'],
             'price' => $request['price'],
             'description' => $request['description']
         ];*/
-        $item->update($val_data); 
+
+        $val_data = $this->validation($request->all());
+        $item->update($val_data);
         return to_route('items.index');
     }
 
@@ -123,5 +127,25 @@ class ItemController extends Controller
     {
         $item->delete();
         return to_route('items.index');
+    }
+
+    /* 2° METODO DI VALIDAZIONE - con validator::make */
+    private function validation($data)
+    {
+        //Validator::make($data, $rules, $message)
+        $validator = Validator::make($data, [
+            //questi dati e le regole li ho recuperati dallo store sopra
+            'name' => 'required|min:10|max:50',
+            'image' => 'nullable|max:255',
+            'description' => 'nullable|max:1000',
+        ], [
+            //qui posso mettere i messaggi personalizzati
+            'name.required' => 'Il nome è obbligatorio',
+            'name.min' => 'Il nome deve essere di minimo :min caratteri',
+            'name.max' => 'Il nome deve essere di massimo :max caratteri',
+            'image.max' => 'l\'immagine può contenere massimo max: caratteri',
+            'description.max' => 'la descrizione può contenere massimo max: caratteri',
+        ])->validate();
+        return $validator;
     }
 }

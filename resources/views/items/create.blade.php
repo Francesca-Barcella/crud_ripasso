@@ -28,7 +28,7 @@
         </div>
         <div class="form-group my-2">
             <label for="description">Description</label>
-            <input type="text" name="description" id="description" class="form-control" placeholder="Insert description" aria-describedby="helpId" value="{{old('description')}}" required>
+            <input type="text" name="description" id="description" class="form-control" placeholder="Insert description" aria-describedby="helpId" value="{{old('description')}}">
         </div>
         <button type="submit" class="btn btn-primary mt-5">Add</button>
     </form>
