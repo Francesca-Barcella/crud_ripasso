@@ -42,21 +42,25 @@ class ItemController extends Controller
     {
         /* dd per vedere se classe Request importata correttamente*/
         //dd($request->all());
-        /* 3° step - validation nello store del PageController*/
+        /* 1° step - validation backend - inserisco le regole di validazione nello store del PageController */
         $val_data = $request -> validate([
-            'name' => 'required|min:10|max:255',
-            'image' => 'required|min:10|max:255',
+            'name' => 'required|min:10|max:50',
+            'image' => 'nullable|max:255',
             /* capire come funzionano i numeri per il price */
-            'description' => 'required|min:10|max:255',
+            'description' => 'nullable|max:1000',
         ]);
-
-        $data = [
+  
+        /* $data = [
             'name' => $request['name'],
             'image' => $request['image'],
             'price' => $request['price'],
             'description' => $request['description']
         ];
-        Item::create($data);
+        Item::create($data); */
+
+        /* 2° step - validation backend - posso generare l'istanza sfruttando la variabile $val_dat ed il metodo create - salvando il tutto dentro la variabile $item*/
+        $item = Item::create($val_data);
+
         return to_route('items.index');
     }
 
