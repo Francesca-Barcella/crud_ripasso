@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
@@ -35,8 +36,20 @@ class ItemController extends Controller
      * @param  \App\Http\Requests\StoreItemRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreItemRequest $request)
+
+    
+    public function store(Request $request)
     {
+        /* dd per vedere se classe Request importata correttamente*/
+        //dd($request->all());
+        /* 3° step - validation nello store del PageController*/
+        $val_data = $request -> validate([
+            'name' => 'required|min:10|max:255',
+            'image' => 'required|min:10|max:255',
+            /* capire come funzionano i numeri per il price */
+            'description' => 'required|min:10|max:255',
+        ]);
+
         $data = [
             'name' => $request['name'],
             'image' => $request['image'],
