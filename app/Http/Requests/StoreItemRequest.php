@@ -24,7 +24,20 @@ class StoreItemRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => 'required|min:10|max:50',
+            'image' => 'nullable|max:255',
+            'description' => 'nullable|max:1000',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Il nome è obbligatorio',
+            'name.min' => 'Il nome deve essere di minimo :min caratteri',
+            'name.max' => 'Il nome deve essere di massimo :max caratteri',
+            'image.max' => 'l\'immagine può contenere massimo max: caratteri',
+            'description.max' => 'la descrizione può contenere massimo max: caratteri',
         ];
     }
 }

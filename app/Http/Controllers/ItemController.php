@@ -39,7 +39,7 @@ class ItemController extends Controller
      */
 
 
-    public function store(Request $request)
+    public function store(StoreItemRequest $request)
     {
         /* ORIGINE */
         /* $data = [
@@ -60,8 +60,9 @@ class ItemController extends Controller
             'description' => 'nullable|max:1000',
         ]); */
         /* 2° METODO - 1° step - validation backend - richiamo le regole tramite validation e i campi qui sopra li trasporto nella function validation */
-        $val_data = $this->validation($request->all());
-
+        //$val_data = $this->validation($request->all());
+        /* 3° METODO - validation backend - riporto la classe Request a StoreItemRequest  e modifico la variabile $val_data*/
+        $val_data = $request->validated();
         /* 1° METODO - 2° step - validation backend - posso generare l'istanza sfruttando la variabile $val_dat ed il metodo create - salvando il tutto dentro la variabile $item*/
         $item = Item::create($val_data);
         return to_route('items.index');
@@ -96,7 +97,7 @@ class ItemController extends Controller
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Item $item)
+    public function update(UpdateItemRequest $request, Item $item)
     {
 
         /*   $val_data = $request -> validate([
@@ -112,7 +113,8 @@ class ItemController extends Controller
             'description' => $request['description']
         ];*/
 
-        $val_data = $this->validation($request->all());
+        //$val_data = $this->validation($request->all());
+        $val_data = $request->validated();
         $item->update($val_data);
         return to_route('items.index');
     }
@@ -130,22 +132,23 @@ class ItemController extends Controller
     }
 
     /* 2° METODO DI VALIDAZIONE - con validator::make */
-    private function validation($data)
+    /* 3° METODO DI VALIDAZIONE - questa function viene riportata nel file FormRequest corrispondente e da qui sparisce */
+   /*  private function validation($data)
     {
-        //Validator::make($data, $rules, $message)
+        Validator::make($data, $rules, $message)
         $validator = Validator::make($data, [
-            //questi dati e le regole li ho recuperati dallo store sopra
+            questi dati e le regole li ho recuperati dallo store sopra
             'name' => 'required|min:10|max:50',
             'image' => 'nullable|max:255',
             'description' => 'nullable|max:1000',
-        ], [
-            //qui posso mettere i messaggi personalizzati
-            'name.required' => 'Il nome è obbligatorio',
+        ], [ */
+            /* qui posso mettere i messaggi personalizzati */
+ /*            'name.required' => 'Il nome è obbligatorio',
             'name.min' => 'Il nome deve essere di minimo :min caratteri',
             'name.max' => 'Il nome deve essere di massimo :max caratteri',
             'image.max' => 'l\'immagine può contenere massimo max: caratteri',
             'description.max' => 'la descrizione può contenere massimo max: caratteri',
         ])->validate();
         return $validator;
-    }
+    } */
 }
