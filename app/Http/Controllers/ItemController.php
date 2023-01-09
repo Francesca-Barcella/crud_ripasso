@@ -93,15 +93,23 @@ class ItemController extends Controller
      * @param  \App\Models\Item  $item
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateItemRequest $request, Item $item)
+    public function update(Request $request, Item $item)
     {
-        $data = [
+
+        $val_data = $request -> validate([
+            'name' => 'required|min:10|max:50',
+            'image' => 'nullable|max:255',
+            /* capire come funzionano i numeri per il price */
+            'description' => 'nullable|max:1000',
+        ]);
+        
+        /* $data = [
             'name' => $request['name'],
             'image' => $request['image'],
             'price' => $request['price'],
             'description' => $request['description']
-        ];
-        $item->update($data);
+        ];*/
+        $item->update($val_data); 
         return to_route('items.index');
     }
 

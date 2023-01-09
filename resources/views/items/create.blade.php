@@ -2,21 +2,16 @@
 
 @section('content')
 
-<!-- 1° step - validation lato frontend - aggiungo required agli input obbligatori del form -->
-<!-- 2° step - validation lato frontend - inserisco snipped per il redirect per validatione fallita -->
-<!-- 3° step - validation lato frontend - inserisco "OLD" in value per conservare i dati già scritti nel form in caso di validazione fallita" -->
+<!-- 1° step - validation frontend - aggiungo required agli input obbligatori del form -->
+<!-- 2° step - validation frontend - inserisco snipped per il redirect per validatione fallita -->
+<!-- 3° step - validation frontend - inserisco "OLD" in value per conservare i dati già scritti nel form in caso di validazione fallita" 
+[FARE ANCHE IN VIEW EDIT!!!]-->
+<!-- 4° step - validation frontend - esporto lo snipped dell'error e sostituisco con include visto che poi mi servirà anche in edit" 
+[FARE ANCHE IN VIEW EDIT!!!]-->
 <div class="container py-5">
     <h3>Add New Item</h3>
     <h1>Create Post</h1>
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
+    @include('partials.errors')
     <form action="{{route('items.store')}}" method="post">
         @csrf
         <div class="form-group my-2">
@@ -33,7 +28,7 @@
         </div>
         <div class="form-group my-2">
             <label for="description">Description</label>
-            <input type="text" name="description" id="description" class="form-control" placeholder="Insert description" aria-describedby="helpId" value="{{old('description')}}">
+            <input type="text" name="description" id="description" class="form-control" placeholder="Insert description" aria-describedby="helpId" value="{{old('description')}}" required>
         </div>
         <button type="submit" class="btn btn-primary mt-5">Add</button>
     </form>
