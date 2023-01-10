@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateItemRequest extends FormRequest
 {
@@ -24,7 +25,9 @@ class UpdateItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:10|max:50',
+            //Rule::unique('users')->ignore($user->id) -> quindi la regola 'name' diventa un array come sintassi
+            //serve per far si che nell'update ignori la validazione dell'unictà del campo
+            'name' => ['required', Rule::unique('items')->ignore($this->item->id), 'min:10', 'max:50'],
             'image' => 'nullable|max:255',
             'description' => 'nullable|max:1000',
         ];
